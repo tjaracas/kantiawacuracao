@@ -5,6 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kant'i Awa</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    /* Hero content */
+    .hero-content {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Tours sectie */
+    .tours {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      text-decoration: none;
+      background-color: #000;
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .card:hover {
+      background-color: #e67e22;
+    }
+
+    /* Openingstijden accent */
+    .opening-info {
+      display: inline-block;
+      background-color: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .opening-info p {
+      margin: 0.3rem 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .opening-info {
+        width: 90%;
+        padding: 1rem;
+      }
+
+      .tours {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card {
+        width: 80%;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="hero">
@@ -21,7 +85,14 @@
 
     <div class="hero-content">
       <h1>Welkom bij Kant'i Awa</h1>
-      <p>Spiesen, Pasta en puur plezier! </p>
+      <p>Spiesen, Pasta en puur plezier!</p>
+
+      <div class="opening-info">
+        <p><strong>Openingstijden:</strong></p>
+        <p>Donderdag t/m Zaterdag: 16:00 - 22:00</p>
+        <p>Zondag: 11:00 - 22:00</p>
+        <p><strong>Telefoon:</strong> +5999 5245692</p>
+      </div>
     </div>
 
     <section class="tours">
@@ -32,4 +103,5 @@
   </header>
 </body>
 </html>
+
 
