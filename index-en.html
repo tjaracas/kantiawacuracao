@@ -1,35 +1,105 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kant'i Awa</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    /* Hero content */
+    .hero-content {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Tours section */
+    .tours {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      text-decoration: none;
+      background-color: #000;
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .card:hover {
+      background-color: #e67e22;
+    }
+
+    /* Opening hours accent */
+    .opening-info {
+      display: inline-block;
+      background-color: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .opening-info p {
+      margin: 0.3rem 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .opening-info {
+        width: 90%;
+        padding: 1rem;
+      }
+
+      .tours {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card {
+        width: 80%;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="hero">
     <nav class="navbar">
       <div class="logo">Kant'i Awa</div>
       <ul class="nav-links">
-        <li><a href="/index.html">Home</a></li>
-<!--        <li><a href="prijzen.html">Prijzen</a></li> -->
-<!--        <li><a href="over-ons.html">Over ons</a></li> -->
-<!--        <li><a href="contact.html">Contact</a></li> -->
+        <li><a href="/index-en.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="reservering.html">Reservation</a></li>
+        <li><a href="lokatie.html">Location</a></li>
         <li><a href="/index.html">NL</a></li>
       </ul>
     </nav>
 
     <div class="hero-content">
-      <h1>Welcome at Kant'i Awa</h1>
-      <p>Skewers, Pasta en pure Delight! </p>
+      <h1>Welcome to Kant'i Awa</h1>
+      <p>Skewers, Pasta and pure fun!</p>
+
+      <div class="opening-info">
+        <p><strong>Opening Hours:</strong></p>
+        <p>Thursday to Saturday: 4:00 PM - 10:00 PM</p>
+        <p>Sunday: 11:00 AM - 10:00 PM</p>
+        <p><strong>Phone:</strong> +5999 5245692</p>
+      </div>
     </div>
 
     <section class="tours">
-      <a href="menu-en.html" class="card">Menu</a>
-      <a href="reservering-en.html" class="card">Reservation</a>
-      <a href="lokatie-en.html" class="card">Location</a>
+      <a href="menu.html" class="card">Menu</a>
+      <a href="reservering.html" class="card">Reservation</a>
+      <a href="lokatie.html" class="card">Location</a>
     </section>
   </header>
 </body>
 </html>
-
