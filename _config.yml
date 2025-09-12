@@ -1,0 +1,15 @@
+title: Kanti Awa Curacao
+description: Restaurant, Spanish Water, Skewers, Shrimps, Food, Drinks, Delight, Fun!  
+baseurl: ""
+url: "https://kantiawacuracao.com"
+theme: minima
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
