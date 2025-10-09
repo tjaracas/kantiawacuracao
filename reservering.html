@@ -6,7 +6,6 @@
   <title>Reservering - Kant'i Awa</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <style>
-    /* BODY MET ACHTERGROND */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -14,7 +13,6 @@
       background-size: cover;
     }
 
-    /* NAVBAR */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -68,7 +66,6 @@
       background-color: #fff;
     }
 
-    /* FORM */
     main {
       display: flex;
       justify-content: center;
@@ -121,14 +118,12 @@
       background-color: #e67e22;
     }
 
-    /* FOOTER */
     footer {
       text-align: center;
       padding: 1rem;
       background-color: rgba(245, 245, 245, 0.9);
     }
 
-    /* RESPONSIVE */
     @media (max-width: 768px) {
       .nav-links {
         display: none;
@@ -156,7 +151,6 @@
       }
     }
 
-    /* Success message */
     .success-message {
       display: none;
       text-align: center;
@@ -165,7 +159,6 @@
       font-weight: bold;
     }
 
-    /* Dagen gesloten melding */
     .closed-days {
       text-align: center;
       color: red;
@@ -195,7 +188,7 @@
     </ul>
   </nav>
 
-  <!-- FORMULIER -->
+  <!-- FORM -->
   <main>
     <form id="reserveringForm" action="https://formspree.io/f/xqadjdzj" method="POST">
       <h2>Reservering</h2>
@@ -212,6 +205,11 @@
 
       <label for="datum">Datum</label>
       <input type="date" id="datum" name="Datum" required>
+
+      <!-- NIEUW TIJDVELD -->
+      <label for="tijd">Gewenste Tijd</label>
+      <input type="time" id="tijd" name="Tijd" min="16:00" max="21:00" required>
+      <small style="color: #666;">Beschikbaar tussen 16:00 en 21:00 uur</small>
 
       <label for="personen">Aantal Personen</label>
       <input type="number" id="personen" name="Personen" min="1" required>
@@ -232,14 +230,14 @@
   </footer>
 
   <script>
-    // Hamburger menu toggle
+    // Hamburger menu
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('nav-links');
     hamburger.addEventListener('click', () => {
       navLinks.classList.toggle('active');
     });
 
-    // Stel datum van vandaag in als default
+    // Datum validatie (ma, di, wo gesloten)
     const datumInput = document.getElementById('datum');
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -247,24 +245,28 @@
     const dd = String(today.getDate()).padStart(2, '0');
     datumInput.value = `${yyyy}-${mm}-${dd}`;
 
-    // Helper: parse date value as local date to voorkom timezone-shift
     function isClosedDay(dateString) {
       if (!dateString) return false;
-      const parts = dateString.split('-');
-      if (parts.length !== 3) return false;
-      const y = Number(parts[0]);
-      const m = Number(parts[1]);
-      const d = Number(parts[2]);
-      const selectedDate = new Date(y, m - 1, d); // maak lokale datum
-      const day = selectedDate.getDay(); // 0 = zondag, 1 = maandag, ..., 6 = zaterdag
-      return day === 1 || day === 2 || day === 3; // ma, di, wo
+      const [y, m, d] = dateString.split('-').map(Number);
+      const selectedDate = new Date(y, m - 1, d);
+      const day = selectedDate.getDay();
+      return day === 1 || day === 2 || day === 3;
     }
 
-    // Verbied reservering op maandag, dinsdag en woensdag (input check)
     datumInput.addEventListener('input', () => {
       if (isClosedDay(datumInput.value)) {
         alert("Kanti Awa is gesloten op maandag, dinsdag en woensdag. Kies een andere dag.");
         datumInput.value = "";
+      }
+    });
+
+    // Tijd validatie (tussen 16:00 en 21:00)
+    const tijdInput = document.getElementById('tijd');
+    tijdInput.addEventListener('input', () => {
+      const time = tijdInput.value;
+      if (time < "16:00" || time > "21:00") {
+        alert("Reserveren kan alleen tussen 16:00 en 21:00 uur.");
+        tijdInput.value = "";
       }
     });
 
@@ -273,10 +275,16 @@
     const successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', function(e) {
-      // extra check vlak voor versturen (voorkomt omzeilen)
       if (isClosedDay(datumInput.value)) {
         e.preventDefault();
         alert("Kanti Awa is gesloten op maandag, dinsdag en woensdag. Kies een andere dag.");
+        return;
+      }
+
+      const tijd = tijdInput.value;
+      if (tijd < "16:00" || tijd > "21:00") {
+        e.preventDefault();
+        alert("Reserveren kan alleen tussen 16:00 en 21:00 uur.");
         return;
       }
 
@@ -303,5 +311,6 @@
 
 </body>
 </html>
+
 
    
