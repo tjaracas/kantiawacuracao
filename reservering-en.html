@@ -207,6 +207,9 @@
       <label for="datum">Date</label>
       <input type="date" id="datum" name="Datum" required>
 
+      <label for="tijd">Preferred Time</label>
+      <input type="time" id="tijd" name="Tijd" min="16:00" max="21:00" required>
+
       <label for="personen">Number of Guests</label>
       <input type="number" id="personen" name="Personen" min="1" required>
 
@@ -235,6 +238,7 @@
 
     // Date validation - block Monday, Tuesday, Wednesday
     const datumInput = document.getElementById('datum');
+    const tijdInput = document.getElementById('tijd');
     const today = new Date();
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -250,12 +254,35 @@
       }
     });
 
+    // Time validation - only between 16:00 and 21:00
+    tijdInput.addEventListener('input', function() {
+      if (this.value < "16:00" || this.value > "21:00") {
+        alert("Reservations are only available between 16:00 and 21:00.");
+        this.value = "";
+      }
+    });
+
     // Form submission with Formspree
     const form = document.getElementById('reserveringForm');
     const successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+
+      // Check closed days
+      const selectedDate = new Date(datumInput.value + 'T00:00');
+      const day = selectedDate.getUTCDay();
+      if (day === 1 || day === 2 || day === 3) {
+        alert("We are closed on Monday, Tuesday and Wednesday. Please choose another day.");
+        return;
+      }
+
+      // Check time range
+      if (tijdInput.value < "16:00" || tijdInput.value > "21:00") {
+        alert("Reservations are only available between 16:00 and 21:00.");
+        return;
+      }
+
       const data = new FormData(form);
 
       fetch(form.action, {
