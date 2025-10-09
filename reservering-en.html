@@ -20,7 +20,6 @@
       padding: 1rem 2rem;
       background-color: #000;
       color: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -196,22 +195,22 @@
       <p class="closed-days">We are closed on Monday, Tuesday and Wednesday.</p>
 
       <label for="naam">Name</label>
-      <input type="text" id="naam" name="Naam" required>
+      <input type="text" id="naam" name="Name" required>
 
       <label for="email">Email</label>
       <input type="email" id="email" name="Email" required>
 
       <label for="telefoon">Phone</label>
-      <input type="tel" id="telefoon" name="Telefoon" required>
+      <input type="tel" id="telefoon" name="Phone" required>
 
       <label for="datum">Date</label>
-      <input type="date" id="datum" name="Datum" required>
+      <input type="date" id="datum" name="Date" required>
 
-      <label for="tijd">Preferred Time</label>
-      <input type="time" id="tijd" name="Tijd" min="16:00" max="21:00" required>
+      <label for="tijd">Time</label>
+      <input type="time" id="tijd" name="Time" required step="60" pattern="[0-9]{2}:[0-9]{2}">
 
       <label for="personen">Number of Guests</label>
-      <input type="number" id="personen" name="Personen" min="1" required>
+      <input type="number" id="personen" name="Guests" min="1" required>
 
       <label for="opmerkingen">Remarks</label>
       <textarea id="opmerkingen" name="Remarks" rows="4"></textarea>
@@ -238,7 +237,6 @@
 
     // Date validation - block Monday, Tuesday, Wednesday
     const datumInput = document.getElementById('datum');
-    const tijdInput = document.getElementById('tijd');
     const today = new Date();
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -254,11 +252,13 @@
       }
     });
 
-    // Time validation - only between 16:00 and 21:00
-    tijdInput.addEventListener('input', function() {
-      if (this.value < "16:00" || this.value > "21:00") {
-        alert("Reservations are only available between 16:00 and 21:00.");
-        this.value = "";
+    // Safari compatibility for time field
+    const tijdInput = document.getElementById('tijd');
+    tijdInput.addEventListener('change', function() {
+      const validFormat = /^([01]\d|2[0-3]):([0-5]\d)$/;
+      if (!validFormat.test(this.value)) {
+        alert("Please use a valid time format (HH:MM).");
+        this.value = '';
       }
     });
 
@@ -268,21 +268,6 @@
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-
-      // Check closed days
-      const selectedDate = new Date(datumInput.value + 'T00:00');
-      const day = selectedDate.getUTCDay();
-      if (day === 1 || day === 2 || day === 3) {
-        alert("We are closed on Monday, Tuesday and Wednesday. Please choose another day.");
-        return;
-      }
-
-      // Check time range
-      if (tijdInput.value < "16:00" || tijdInput.value > "21:00") {
-        alert("Reservations are only available between 16:00 and 21:00.");
-        return;
-      }
-
       const data = new FormData(form);
 
       fetch(form.action, {
