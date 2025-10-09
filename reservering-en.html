@@ -207,7 +207,7 @@
       <input type="date" id="datum" name="Date" required>
 
       <label for="tijd">Time</label>
-      <input type="time" id="tijd" name="Time" required step="60" pattern="[0-9]{2}:[0-9]{2}">
+      <input type="time" id="tijd" name="Time" required step="60">
 
       <label for="personen">Number of Guests</label>
       <input type="number" id="personen" name="Guests" min="1" required>
@@ -235,7 +235,7 @@
       navLinks.classList.toggle('active');
     });
 
-    // Date validation - block Monday, Tuesday, Wednesday
+    // --- DATE VALIDATION: Block Monday, Tuesday, Wednesday ---
     const datumInput = document.getElementById('datum');
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -244,25 +244,33 @@
     datumInput.value = `${yyyy}-${mm}-${dd}`;
 
     datumInput.addEventListener('input', function() {
-      const selectedDate = new Date(this.value + 'T00:00');
-      const day = selectedDate.getUTCDay(); // Sunday=0, Monday=1...
-      if (day === 1 || day === 2 || day === 3) { // Mon, Tue, Wed
+      const [year, month, day] = this.value.split('-');
+      const selectedDate = new Date(year, month - 1, day);
+      const dayOfWeek = selectedDate.getDay(); // 0=Sun,1=Mon,...
+      if ([1, 2, 3].includes(dayOfWeek)) {
         alert("We are closed on Monday, Tuesday and Wednesday. Please choose another day.");
         this.value = '';
       }
     });
 
-    // Safari compatibility for time field
+    // --- TIME VALIDATION: Only between 16:00 and 21:00 ---
     const tijdInput = document.getElementById('tijd');
     tijdInput.addEventListener('change', function() {
       const validFormat = /^([01]\d|2[0-3]):([0-5]\d)$/;
       if (!validFormat.test(this.value)) {
         alert("Please use a valid time format (HH:MM).");
         this.value = '';
+        return;
+      }
+
+      const [hour, minute] = this.value.split(':').map(Number);
+      if (hour < 16 || hour >= 21) {
+        alert("Reservations are only possible between 4 PM and 9 PM.");
+        this.value = '';
       }
     });
 
-    // Form submission with Formspree
+    // --- FORM SUBMISSION (Formspree) ---
     const form = document.getElementById('reserveringForm');
     const successMessage = document.getElementById('successMessage');
 
@@ -275,7 +283,7 @@
         body: data,
         headers: { 'Accept': 'application/json' }
       }).then(response => {
-        if(response.ok){
+        if (response.ok) {
           form.reset();
           successMessage.style.display = 'block';
           datumInput.value = `${yyyy}-${mm}-${dd}`;
