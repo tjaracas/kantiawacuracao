@@ -6,7 +6,6 @@
   <title>Reservering - Kant'i Awa</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <style>
-    /* (alle CSS ongewijzigd) */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -172,7 +171,6 @@
   <!-- NAVBAR -->
   <nav class="navbar">
     <div class="logo">Kant'i Awa</div>
-
     <div class="hamburger" id="hamburger">
       <div></div>
       <div></div>
@@ -245,23 +243,28 @@
     const dd = String(today.getDate()).padStart(2, '0');
     datumInput.value = `${yyyy}-${mm}-${dd}`;
 
-    // ✅ Dagen blokkeren (ma, di, wo) – lokale tijdzone veilig
-    datumInput.addEventListener('input', function() {
-      const [jaar, maand, dag] = this.value.split('-').map(Number);
+    // Helper: controleer of datum op ma/di/wo valt
+    function isClosedDate(value) {
+      if (!value) return false;
+      const parts = value.split('-').map(Number);
+      if (parts.length !== 3) return false;
+      const [jaar, maand, dag] = parts;
       const selectedDate = new Date(jaar, maand - 1, dag);
-      const day = selectedDate.getDay();
-      if (day === 1 || day === 2 || day === 3) {
+      const day = selectedDate.getDay(); // 0=zo,1=ma,2=di,3=wo
+      return (day === 1 || day === 2 || day === 3);
+    }
+
+    // Blokkeren bij input
+    datumInput.addEventListener('input', function() {
+      if (isClosedDate(this.value)) {
         alert("Wij zijn gesloten op maandag, dinsdag en woensdag. Kies een andere dag.");
         this.value = '';
       }
     });
 
-    // Tijdvalidatie (Safari-proof, alleen 16:00–21:00)
+    // Tijdvalidatie (16:00–21:00)
     const tijdInput = document.getElementById('tijd');
-
-    if (!tijdInput.value) {
-      tijdInput.value = "16:00";
-    }
+    if (!tijdInput.value) tijdInput.value = "16:00";
 
     tijdInput.addEventListener('blur', function() {
       const validFormat = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -270,26 +273,28 @@
         this.value = "16:00";
         return;
       }
-
       const [uur, min] = this.value.split(':').map(Number);
       const totaalMinuten = uur * 60 + min;
       const open = 16 * 60;
       const dicht = 21 * 60;
-
       if (totaalMinuten < open || totaalMinuten > dicht) {
         alert("Het restaurant is geopend tussen 16:00 en 21:00. Kies een tijd binnen deze uren.");
         this.value = "16:00";
       }
     });
 
-    // Formulierverwerking via Formspree
+    // Formulier submit
     const form = document.getElementById('reserveringForm');
     const successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      const data = new FormData(form);
+      if (isClosedDate(datumInput.value)) {
+        alert("Wij zijn gesloten op maandag, dinsdag en woensdag. Kies een andere dag.");
+        return;
+      }
 
+      const data = new FormData(form);
       fetch(form.action, {
         method: form.method,
         body: data,
