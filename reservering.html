@@ -97,7 +97,7 @@
       <input type="tel" id="telefoon" name="Telefoon" required>
 
       <label for="datum">Datum</label>
-      <input type="date" id="datum" name="Datum" required>
+      <input type="date" id="datum" name="Datum" required placeholder="Kies een datum">
 
       <label for="tijd">Tijd</label>
       <input type="time" id="tijd" name="Tijd" required value="16:00">
@@ -127,13 +127,8 @@
     const navLinks = document.getElementById('nav-links');
     hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
 
-    // Datum vandaag
     const datumInput = document.getElementById('datum');
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    datumInput.value = `${yyyy}-${mm}-${dd}`;
+    const tijdInput = document.getElementById('tijd');
 
     // Verboden dagen: 1=ma, 2=di, 3=wo
     const forbiddenDays = [1,2,3];
@@ -153,7 +148,6 @@
       }
     }
 
-    // Controleer bij verandering
     datumInput.addEventListener('input', updateDateInputVisual);
 
     // Form submit controle
@@ -161,6 +155,12 @@
     const successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', function(e){
+      if(!datumInput.value){
+        e.preventDefault();
+        alert("Kies een datum voor uw reservering.");
+        datumInput.focus();
+        return false;
+      }
       if(checkForbiddenDate(datumInput.value)){
         e.preventDefault();
         alert("Wij zijn gesloten op maandag, dinsdag en woensdag. Kies een andere dag.");
@@ -178,7 +178,6 @@
         if(response.ok){
           form.reset();
           successMessage.style.display = 'block';
-          datumInput.value = `${yyyy}-${mm}-${dd}`;
           tijdInput.value = "16:00";
           updateDateInputVisual();
         } else {
@@ -188,9 +187,6 @@
         alert("Er ging iets mis. Probeer het later opnieuw.");
       });
     });
-
-    // Startvisueel check
-    updateDateInputVisual();
   </script>
 
 </body>
