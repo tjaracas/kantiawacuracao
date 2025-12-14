@@ -73,7 +73,7 @@
       <div></div><div></div><div></div>
     </div>
     <ul class="nav-links" id="nav-links">
-      <li><a href="/index-en.html" class="active">Home</a></li>
+      <li><a href="/index-en.html">Home</a></li>
       <li><a href="menu-en.html">Menu</a></li>
       <li><a href="reservation.html" class="active">Reservation</a></li>
       <li><a href="location.html">Location</a></li>
@@ -133,6 +133,9 @@
     // Forbidden days: 1=Mon, 2=Tue, 3=Wed
     const forbiddenDays = [1,2,3];
 
+    /* >>> ADDED: fully booked date <<< */
+    const fullyBookedDates = ['2025-12-25'];
+
     function checkForbiddenDate(dateValue) {
       if (!dateValue) return false;
       const [y,m,d] = dateValue.split('-').map(Number);
@@ -140,8 +143,13 @@
       return forbiddenDays.includes(date.getDay());
     }
 
+    /* >>> ADDED <<< */
+    function isFullyBooked(dateValue) {
+      return fullyBookedDates.includes(dateValue);
+    }
+
     function updateDateInputVisual() {
-      if(checkForbiddenDate(datumInput.value)) {
+      if(checkForbiddenDate(datumInput.value) || isFullyBooked(datumInput.value)) {
         datumInput.classList.add('invalid');
       } else {
         datumInput.classList.remove('invalid');
@@ -161,9 +169,18 @@
         datumInput.focus();
         return false;
       }
+
       if(checkForbiddenDate(datumInput.value)){
         e.preventDefault();
         alert("We are closed on Monday, Tuesday, and Wednesday. Please choose another day.");
+        datumInput.focus();
+        return false;
+      }
+
+      /* >>> ADDED <<< */
+      if(isFullyBooked(datumInput.value)){
+        e.preventDefault();
+        alert("December 25, 2025 is fully booked. Please choose another date.");
         datumInput.focus();
         return false;
       }
